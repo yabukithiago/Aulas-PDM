@@ -7,10 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.examples.newnews.ui.theme.NewNewsTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,10 +19,29 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NewNewsTheme {
+                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeView(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+
+                    NavHost(navController = navController,
+                        startDestination = "home",
+                        modifier = Modifier.padding(innerPadding))  {
+                        composable( route = "home"){
+                            HomeView(
+                                modifier = Modifier.padding(innerPadding),
+
+                                onArticleClick = {
+                                    navController.navigate("article/${it}")
+                                }
+                            )
+                        }
+                        composable(route = "article/{url}"){
+                            val url = it.arguments?.getString("url")
+                            url?.let {
+                                ArticleDetailView(url = it)
+                            }
+                        }
+                    }
+
                 }
             }
         }

@@ -12,41 +12,52 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.examples.newnews.models.Article
-import com.examples.newnews.ui.theme.NewNewsTheme
+import com.examples.newnews.models.toStringDate
+import java.util.Date
 
 @Composable
-fun ArticleView(article: Article) {
-    Row(){
-        Image(
-            modifier = Modifier
-                .width(128.dp)
-                .height(128.dp),
-            painter = painterResource(id = R.drawable.baseline_image_24),
-            contentDescription = "Article Image")
-
-        Column(modifier = Modifier.fillMaxWidth()) {
+fun ArticleView(modifier: Modifier = Modifier, article: Article) {
+    Row (modifier = modifier){
+        article.urlToImage?.let {
+            AsyncImage(
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(120.dp),
+                model = it,
+                contentDescription = "Article Image"
+            )
+        }?:run {
+            Image(
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(120.dp),
+                painter = painterResource(id = R.drawable.baseline_image_24),
+                contentDescription = "Article Image"
+            )
+        }
+        Column (modifier = Modifier.fillMaxWidth()){
             Text(text = article.title ?: "",
-                style = MaterialTheme.typography.titleMedium)
-            Text(text = article.description ?: "")
-            Text(modifier = Modifier.padding(top = 8.dp), text = article.publishedAt ?: "")
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(text = article.description ?: "",
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,)
+
+            Text(modifier = Modifier.padding(top = 8.dp), text = article.publishedAt?.toStringDate() ?: "")
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun ArticleViewPreview() {
-    NewNewsTheme {
-        val article = Article(
-            title = "Title 1",
-            description = "Description 1",
-            url = "https://www.google.com",
-            urlToImage = "https://www.google.com",
-            publishedAt = "2021-09-01"
-        )
-        ArticleView(article = article)
-    }
+fun ArticleRowViewPreview() {
+    val article = Article(title = "title", description = "description", url = "url", urlToImage = null, publishedAt = Date())
+    ArticleView(article = article)
 }
