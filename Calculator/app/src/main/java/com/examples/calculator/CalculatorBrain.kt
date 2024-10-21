@@ -1,28 +1,20 @@
 package com.examples.calculator
 
 class CalculatorBrain{
-    enum class Operation(op: String){
+
+    enum class Operation(val op: String){
         SUM("+"),
         SUB("-"),
         MULT("*"),
         DIV("/"),
         SQRT(""),
-        RAND(""),
+        RAND("\uD83D\uDE82"),
         PERCENT("÷");
 
-        fun getOp(value: String) : Operation{
-            return when(value){
-                SUM.toString() -> SUM
-                SUB.toString() -> SUB
-                MULT.toString() -> MULT
-                DIV.toString() -> DIV
-                SQRT.toString() -> SQRT
-                PERCENT.toString() -> PERCENT
-                RAND.toString() -> RAND
-                else -> {
-                    RAND
-                }
-            }
+        companion object {
+            fun getOp(value: String) : Operation {
+                return entries.find { it.op == value } ?: RAND
+             }
         }
     }
 
