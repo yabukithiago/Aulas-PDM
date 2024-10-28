@@ -10,8 +10,8 @@ fun String.encodeURL() : String{
 }
 
 
-fun String.toDate(): Date {
-    //"2024-10-20T17:30:00Z"
+fun String?.toDate(): Date? {
+    if (this.isNullOrEmpty()) return null // Retorna null se a string for nula ou vazia
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
     return dateFormat.parse(this)
 }
@@ -22,22 +22,22 @@ fun Date.toStringDate(): String {
 }
 
 data class Article (
-    var title: String?,
-    var description: String?,
+    var id: Int,
+    var titulo: String?,
+    var descricao: String?,
     var url: String?,
-    var urlToImage: String?,
+    var image: String?,
     var publishedAt: Date?
-){
-    companion object{
-
+) {
+    companion object {
         fun fromJson(articleObject: JSONObject): Article {
-            val title = articleObject.getString("title")
-            val description = articleObject.getString("description")
+            val id = articleObject.getInt("id")
+            val title = articleObject.getString("titulo")
+            val description = articleObject.getString("descricao")
             val url = articleObject.getString("url")
-            val urlToImage = articleObject.getString("urlToImage")
-            val publishedAt = articleObject.getString("publishedAt").toDate()
-            return Article(title, description, url, urlToImage, publishedAt)
+            val image = articleObject.getString("multimediaPrincipal")
+            val publishedAt = articleObject.optString("publishedAt", null)?.toDate()
+            return Article(id, title, description, url, image, publishedAt)
         }
     }
-
 }

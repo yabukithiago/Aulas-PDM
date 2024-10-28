@@ -23,7 +23,7 @@ import java.util.Date
 @Composable
 fun ArticleView(modifier: Modifier = Modifier, article: Article) {
     Row (modifier = modifier){
-        article.urlToImage?.let {
+        article.image?.let {
             AsyncImage(
                 modifier = Modifier
                     .width(120.dp)
@@ -41,12 +41,12 @@ fun ArticleView(modifier: Modifier = Modifier, article: Article) {
             )
         }
         Column (modifier = Modifier.fillMaxWidth()){
-            Text(text = article.title ?: "",
+            Text(text = article.titulo ?: "",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleMedium
             )
-            Text(text = article.description ?: "",
+            Text(text = article.descricao ?: "",
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,)
 
@@ -58,6 +58,6 @@ fun ArticleView(modifier: Modifier = Modifier, article: Article) {
 @Preview(showBackground = true)
 @Composable
 fun ArticleRowViewPreview() {
-    val article = Article(title = "title", description = "description", url = "url", urlToImage = null, publishedAt = Date())
+    val article = Article(id = 0, titulo = "title", descricao = "description", url = "url", image = null, publishedAt = Date())
     ArticleView(article = article)
 }

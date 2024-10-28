@@ -9,6 +9,8 @@ import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
@@ -23,14 +25,14 @@ class HomeViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(ArticleState())
     val uiState: StateFlow<ArticleState> = _uiState
 
-    fun fetchArticles(){
+    fun fetchArticles() {
         _uiState.value = ArticleState(
             isLoading = true
         )
 
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("https://newsapi.org/v2/top-headlines?country=us&apiKey=cdb6e3e10371463d9e2916cc4090b1e7")
+            .url("https://www.publico.pt/api/list/ultimas")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -46,15 +48,13 @@ class HomeViewModel : ViewModel() {
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                    var articleResult = arrayListOf<Article>()
+                    val articleResult = arrayListOf<Article>()
                     val result = response.body!!.string()
 
-                    val jsonObject = JSONObject(result)
-                    val status = jsonObject.getString("status")
-                    if (status == "ok") {
-                        val articlesArray = jsonObject.getJSONArray("articles")
-                        for (index in 0 until articlesArray.length()) {
-                            val articleObject = articlesArray.getJSONObject(index)
+                    try {
+                        val jsonArray = JSONArray(result)
+                        for (index in 0 until jsonArray.length()) {
+                            val articleObject = jsonArray.getJSONObject(index)
                             val article = Article.fromJson(articleObject)
                             articleResult.add(article)
                         }
@@ -62,6 +62,12 @@ class HomeViewModel : ViewModel() {
                             articles = articleResult,
                             isLoading = false,
                             errorMessage = ""
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        _uiState.value = ArticleState(
+                            isLoading = false,
+                            errorMessage = "Erro ao analisar os dados: ${e.message}"
                         )
                     }
                 }
