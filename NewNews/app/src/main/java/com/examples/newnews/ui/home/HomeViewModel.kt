@@ -1,4 +1,4 @@
-package com.examples.newnews
+package com.examples.newnews.ui.home
 
 import androidx.lifecycle.ViewModel
 import com.examples.newnews.models.Article

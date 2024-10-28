@@ -1,4 +1,4 @@
-package com.examples.newnews
+package com.examples.newnews.ui.article
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.examples.newnews.R
 import com.examples.newnews.models.Article
 import com.examples.newnews.models.toStringDate
 import java.util.Date

@@ -1,4 +1,4 @@
-package com.examples.newnews
+package com.examples.newnews.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.examples.newnews.ui.article.ArticleView
 import com.examples.newnews.models.encodeURL
 import com.examples.newnews.ui.theme.NewNewsTheme
 
@@ -50,7 +51,6 @@ fun HomeView( modifier: Modifier = Modifier ,
             }
         }
     }
-
 
     LaunchedEffect(key1 = true) {
         viewModel.fetchArticles()

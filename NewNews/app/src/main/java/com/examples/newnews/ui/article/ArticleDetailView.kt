@@ -1,4 +1,4 @@
-package com.examples.newnews
+package com.examples.newnews.ui.article
 
 import android.webkit.WebView
 import android.webkit.WebViewClient
