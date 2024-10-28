@@ -25,24 +25,24 @@ fun HomeView( modifier: Modifier = Modifier ,
     val uiState by viewModel.uiState.collectAsState()
 
     if (uiState.isLoading) {
-        Box(modifier = modifier.fillMaxSize(),
+        Box(modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center)
         {
             Text(text = "Loading...")
         }
     }else if(uiState.errorMessage.isNotEmpty()){
-        Box(modifier = modifier.fillMaxSize(),
+        Box(modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center)
         {
             Text(text = uiState.errorMessage)
         }
     }else{
-        LazyColumn(modifier = modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
             itemsIndexed(
                 items = uiState.articles
             ){
              _, item ->
-                ArticleView(modifier = modifier
+                ArticleView(modifier = Modifier
                     .clickable {
                         onArticleClick(item.url?.encodeURL() ?: "")
                     },

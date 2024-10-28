@@ -9,7 +9,6 @@ fun String.encodeURL() : String{
     return  URLEncoder.encode(this, "UTF-8")
 }
 
-
 fun String?.toDate(): Date? {
     if (this.isNullOrEmpty()) return null // Retorna null se a string for nula ou vazia
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
