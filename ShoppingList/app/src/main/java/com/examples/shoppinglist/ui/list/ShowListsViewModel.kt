@@ -20,10 +20,6 @@ class ShowListItemsViewModel : ViewModel(){
             state.value = state.value.copy(
                 listItems = listItems
             )
-
-            for (item in listItems) {
-                println(item)
-            }
         }
     }
 }

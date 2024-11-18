@@ -9,7 +9,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 data class AddListState(
     var name: String = "",
     var description: String = "",
-    val numeroVisitas: Int = 0,
     val isLoading: Boolean = false,
     var errorMessage: String? = null
 )
@@ -28,28 +27,5 @@ class AddListViewModel : ViewModel() {
 
     fun onDescriptionChange(newValue: String) {
         state.value = state.value.copy(description = newValue)
-    }
-
-    fun addList(
-        name: String, description: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit
-    ) {
-
-        val uid = auth.currentUser?.uid
-
-        if (uid == null) {
-            onFailure("Usuário não autenticado")
-            return
-        }
-
-        val lists = ListItem(name, description)
-
-        db.collection("listTypes")
-            .add(lists)
-            .addOnSuccessListener { documentReference ->
-                onSuccess("Lista criada com sucesso com ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                onFailure("Erro ao registrar no Firestore: ${e.message}")
-            }
     }
 }

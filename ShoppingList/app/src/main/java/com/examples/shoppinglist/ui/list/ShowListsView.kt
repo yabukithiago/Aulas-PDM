@@ -31,13 +31,12 @@ fun ShowListsView(navController: NavController, modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 itemsIndexed(
                     items = state.listItems
-                ) { index, item ->
+                ) { _, item ->
                     ListCard (
+                        navController = navController,
+                        id = item.id,
                         name = item.name,
                         description = item.description,
-//                        onClick = {
-//                            navController.navigate("list/${item.id}")
-//                        }
                     )
                 }
             }
