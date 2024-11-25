@@ -1,4 +1,4 @@
-package com.examples.shoppinglist.ui.list
+package com.examples.shoppinglist.ui.item
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -27,16 +27,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.examples.shoppinglist.R
-import com.examples.shoppinglist.data.repository.ListItemRepository
+import com.examples.shoppinglist.data.repository.ItemRepository
 import com.examples.shoppinglist.ui.components.TopBar
 import com.examples.shoppinglist.ui.theme.ShoppingListTheme
 
 @Composable
-fun AddListView(navController: NavController) {
-    val viewModel: AddListViewModel = viewModel()
+fun AddNewItemView(navController: NavController, listId: String) {
+    val viewModel: AddNewItemViewModel = viewModel()
     val state by viewModel.state
 
-    TopBar(title = "Add Lists", navController = navController)
+    TopBar(title = "Add Items", navController = navController)
 
     Column(
         modifier = Modifier
@@ -55,7 +55,7 @@ fun AddListView(navController: NavController) {
         TextField(
             value = state.name,
             onValueChange = viewModel::onNameChange,
-            label = { Text("Name") },
+            label = { Text("Product Name") },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
@@ -66,9 +66,9 @@ fun AddListView(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
-            value = state.description,
-            onValueChange = viewModel::onDescriptionChange,
-            label = { Text("Description") },
+            value = state.quantity,
+            onValueChange = viewModel::onQuantityChange,
+            label = { Text("Product Quantity") },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
@@ -80,8 +80,8 @@ fun AddListView(navController: NavController) {
 
         Button(
             onClick = {
-                if (state.name.isNotEmpty() && state.description.isNotEmpty()) {
-                        ListItemRepository.addList(state.name, state.description,
+                if (state.name.isNotEmpty() && state.quantity.isNotEmpty()) {
+                    ItemRepository.addItem(listId, state.name, state.quantity,
                         onSuccess = { navController.navigate("showLists") },
                         onFailure = { message -> state.errorMessage = message }
                     )
@@ -101,10 +101,10 @@ fun AddListView(navController: NavController) {
     }
 }
 
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun AddListViewPreview() {
-    ShoppingListTheme() {
-        AddListView(navController = rememberNavController())
+    ShoppingListTheme {
+        com.examples.shoppinglist.ui.list.AddListView(navController = rememberNavController())
     }
 }

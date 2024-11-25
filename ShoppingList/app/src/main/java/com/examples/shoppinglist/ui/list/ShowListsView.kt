@@ -37,6 +37,9 @@ fun ShowListsView(navController: NavController, modifier: Modifier = Modifier) {
                         id = item.id,
                         name = item.name,
                         description = item.description,
+                        onClick = {
+                            navController.navigate("showItems/${item.id}")
+                        }
                     )
                 }
             }

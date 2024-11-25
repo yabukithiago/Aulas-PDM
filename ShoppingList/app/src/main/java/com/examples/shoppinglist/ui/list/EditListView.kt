@@ -49,11 +49,11 @@ fun EditListView(navController: NavController, id: String) {
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("EditList", "Erro ao carregar listas: ${e.message}")
+                Log.e("EditList", "Fail load lists: ${e.message}")
             }
     }
 
-    TopBar(title = "Editar Listas", navController = navController)
+    TopBar(title = "Edit Yours Lists", navController = navController)
 
     Column(
         modifier = Modifier
@@ -72,7 +72,7 @@ fun EditListView(navController: NavController, id: String) {
         TextField(
             value = state.name,
             onValueChange = viewModel::onNameChange,
-            label = { Text("Nome") },
+            label = { Text("New Name") },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
@@ -85,7 +85,7 @@ fun EditListView(navController: NavController, id: String) {
         TextField(
             value = state.description,
             onValueChange = viewModel::onDescriptionChange,
-            label = { Text("Telefone") },
+            label = { Text("New Description") },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
@@ -95,23 +95,21 @@ fun EditListView(navController: NavController, id: String) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         Button(
             onClick = {
                 if (state.name.isNotEmpty() && state.description.isNotEmpty()) {
                     ListItemRepository.updateList(id, state.name, state.description,
-                        onSuccess = { navController.navigate("showLists") },
+                        onSuccess = { navController.navigate("home") },
                         onFailure = { message -> state.errorMessage = message }
                     )
                 } else {
-                    state.errorMessage = "Preencha todos os campos."
+                    state.errorMessage = "Fill in all the fields."
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
             enabled = !state.isLoading
         ) {
-            Text(if (state.isLoading) "Carregando..." else "Editar Lista")
+            Text(if (state.isLoading) "Loading..." else "Edit List")
         }
 
         if (state.errorMessage?.isNotEmpty() == true) {

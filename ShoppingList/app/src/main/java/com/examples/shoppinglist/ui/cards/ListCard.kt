@@ -24,7 +24,9 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,15 +37,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.examples.shoppinglist.data.repository.ItemRepository.countItems
 
 @Composable
-fun ListCard(navController: NavController, id: String, name: String, description: String) {
-
+fun ListCard(navController: NavController, id: String, name: String, description: String, onClick: () -> Unit) {
+    var itemCount by remember { mutableIntStateOf(0) }
     var menuExpanded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(id) {
+        countItems(
+            listTypeId = id,
+            onSuccess = { count ->
+                itemCount = count
+            },
+            onFailure = {
+            }
+        )
+    }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick () }
             .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp),
@@ -63,7 +78,7 @@ fun ListCard(navController: NavController, id: String, name: String, description
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.List,
-                    contentDescription = "Ícone da lista",
+                    contentDescription = "List Icon",
                     tint = Color(0xFF757575),
                     modifier = Modifier.size(30.dp)
                 )
@@ -72,11 +87,18 @@ fun ListCard(navController: NavController, id: String, name: String, description
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.weight(1f)
             ) {
                 InfoRow(icon = Icons.Default.Info, text = name)
                 InfoRow(icon = null, text = description)
+                InfoRow(
+                    icon = Icons.AutoMirrored.Filled.List,
+                    text = "Items: $itemCount"
+                )
             }
+
+            Spacer(modifier = Modifier.width(16.dp))
 
             Box(contentAlignment = Alignment.TopEnd) {
                 Icon(
@@ -92,14 +114,21 @@ fun ListCard(navController: NavController, id: String, name: String, description
                     modifier = Modifier.align(Alignment.TopEnd)
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Editar") },
+                        text = { Text("Add new items") },
+                        onClick = {
+                            navController.navigate("addNewItem/$id")
+                            menuExpanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Edit") },
                         onClick = {
                             navController.navigate("editList/$id")
                             menuExpanded = false
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("Excluir") },
+                        text = { Text("Delete") },
                         onClick = {
                             navController.navigate("deleteList/$id")
                             menuExpanded = false
@@ -114,5 +143,6 @@ fun ListCard(navController: NavController, id: String, name: String, description
 @Preview(showBackground = true)
 @Composable
 fun PreviewListCard(){
-    ListCard(navController = rememberNavController(), id = "1", name = "Lista de Compras", description = "Lista de compras do mês")
+    ListCard(navController = rememberNavController(), id = "1", name = "Lista de Compras",
+        description = "Lista de compras do mês", onClick = {})
 }

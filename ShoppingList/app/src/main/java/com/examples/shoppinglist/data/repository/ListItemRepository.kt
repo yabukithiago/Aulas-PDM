@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 @SuppressLint("StaticFieldLeak")
 object ListItemRepository {
     private val auth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
+    val db = FirebaseFirestore.getInstance()
 
     fun getAll(onSuccess: (List<ListItem>) -> Unit){
         db.collection("listTypes")
@@ -26,7 +26,8 @@ object ListItemRepository {
             }
     }
 
-    fun addList(name: String, description: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit
+    fun addList(name: String, description: String, onSuccess: (String) -> Unit,
+                onFailure: (String) -> Unit
     ) {
         val uid = auth.currentUser?.uid
 
@@ -56,15 +57,13 @@ object ListItemRepository {
             }
     }
 
-    fun updateList(
-        id: String,
-        nome: String,
-        description: String,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
+
+
+    fun updateList(id: String, name: String, description: String, onSuccess: (String) -> Unit,
+                   onFailure: (String) -> Unit
     ) {
         val updates = mapOf(
-            "nome" to nome,
+            "name" to name,
             "description" to description,
         )
 
