@@ -26,34 +26,31 @@ object ListItemRepository {
             }
     }
 
-    fun addList(name: String, description: String, onSuccess: (String) -> Unit,
-                onFailure: (String) -> Unit
-    ) {
+    fun addList(listItem: ListItem, onSuccess: () -> Unit) {
         val uid = auth.currentUser?.uid
+        val currentUser = auth.currentUser
 
+        currentUser?.uid?.let{
+            listItem.owner = arrayListOf(it)
+        }
         if (uid == null) {
-            onFailure("Usuário não autenticado")
             return
         }
 
-        val lists = ListItem(id = "", name = name, description = description)
-
         db.collection("listTypes")
-            .add(lists)
+            .add(listItem)
             .addOnSuccessListener { documentReference ->
                 val generatedId = documentReference.id
                 db.collection("listTypes")
                     .document(generatedId)
                     .update("id", generatedId)
                     .addOnSuccessListener {
-                        onSuccess("Lista criada com sucesso com ID: ${documentReference.id}")
+                        onSuccess()
                     }
-                    .addOnFailureListener { e ->
-                        onFailure("Erro ao adicionar lista: ${e.message}")
+                    .addOnFailureListener {
                     }
             }
-            .addOnFailureListener { e ->
-                onFailure("Erro ao registrar no Firestore: ${e.message}")
+            .addOnFailureListener {
             }
     }
 

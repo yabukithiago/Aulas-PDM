@@ -2,9 +2,9 @@ package com.examples.shoppinglist.ui.list
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.examples.shoppinglist.data.models.ListItem
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.examples.shoppinglist.data.repository.ListItemRepository
 
 data class AddListState(
     var name: String = "",
@@ -17,9 +17,10 @@ class AddListViewModel : ViewModel() {
     var state = mutableStateOf(AddListState())
         private set
 
-    private val db = FirebaseFirestore.getInstance()
-
-    private val auth = FirebaseAuth.getInstance()
+    private val name
+        get() = state.value.name
+    private val description
+        get() = state.value.description
 
     fun onNameChange(newValue: String) {
         state.value = state.value.copy(name = newValue)
@@ -27,5 +28,10 @@ class AddListViewModel : ViewModel() {
 
     fun onDescriptionChange(newValue: String) {
         state.value = state.value.copy(description = newValue)
+    }
+
+    fun addList(){
+        ListItemRepository.addList(listItem = ListItem("", name, description, null),
+            onSuccess = { NavController })
     }
 }

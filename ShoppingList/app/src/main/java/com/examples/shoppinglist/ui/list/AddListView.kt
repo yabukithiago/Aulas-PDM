@@ -27,12 +27,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.examples.shoppinglist.R
-import com.examples.shoppinglist.data.repository.ListItemRepository
 import com.examples.shoppinglist.ui.components.TopBar
 import com.examples.shoppinglist.ui.theme.ShoppingListTheme
 
 @Composable
-fun AddListView(navController: NavController) {
+fun AddListView(navController: NavController = rememberNavController()) {
     val viewModel: AddListViewModel = viewModel()
     val state by viewModel.state
 
@@ -81,10 +80,8 @@ fun AddListView(navController: NavController) {
         Button(
             onClick = {
                 if (state.name.isNotEmpty() && state.description.isNotEmpty()) {
-                        ListItemRepository.addList(state.name, state.description,
-                        onSuccess = { navController.navigate("showLists") },
-                        onFailure = { message -> state.errorMessage = message }
-                    )
+                        viewModel.addList()
+                    navController.popBackStack()
                 } else {
                     state.errorMessage = "Fill in all the fields."
                 }
