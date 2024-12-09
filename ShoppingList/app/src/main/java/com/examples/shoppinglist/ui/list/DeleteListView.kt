@@ -9,13 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.examples.shoppinglist.data.repository.ListItemRepository
 
 @Composable
 fun DeleteListView(navController: NavController, id: String) {
     var showDialog by remember { mutableStateOf(true) }
-
+    val viewModel : DeleteListViewModel = viewModel()
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -23,12 +23,8 @@ fun DeleteListView(navController: NavController, id: String) {
             text = { Text("Tem certeza de que deseja excluir esta lista?") },
             confirmButton = {
                 TextButton(onClick = {
-                    ListItemRepository.deleteList(
+                    viewModel.deleteList(
                         id = id,
-                        onSuccess = {
-                            showDialog = false
-                            navController.navigate("showLists")
-                        },
                         onFailure = { exception ->
                             showDialog = false
                             Log.e("DeleteBeneficiary", "Erro ao excluir: ${exception.message}")

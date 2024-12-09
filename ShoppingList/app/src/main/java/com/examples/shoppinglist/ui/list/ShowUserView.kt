@@ -10,38 +10,34 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.examples.shoppinglist.ui.cards.ListCard
+import com.examples.shoppinglist.ui.cards.UserCard
 import com.examples.shoppinglist.ui.components.TopBar
 
 @Composable
-fun ShowListsView(navController: NavController, modifier: Modifier = Modifier) {
-    val viewModel: ShowListItemsViewModel = viewModel()
+fun ShowUserView(navController: NavController) {
+    val viewModel: ShowUserViewModel = viewModel()
     val state by viewModel.state
 
-    Box(modifier = modifier.fillMaxSize()) {
+    TopBar(title = "Share List", navController = navController)
+
+    Box(modifier = Modifier.fillMaxSize()) {
         Column {
-            TopBar(title = "Your lists", navController = navController)
+            TopBar(title = "Users", navController = navController)
             LazyColumn(contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 itemsIndexed(
-                    items = state.listItems
+                    items = state.listUsers
                 ) { _, item ->
-                    ListCard (
+                    UserCard (
                         navController = navController,
                         id = item.id,
-                        name = item.name,
-                        description = item.description,
+                        name = item.nome,
                         onClick = {
-                            navController.navigate("showItems/${item.id}")
+                            navController.navigate("shareList/${item.id}")
                         }
                     )
                 }
@@ -49,12 +45,6 @@ fun ShowListsView(navController: NavController, modifier: Modifier = Modifier) {
         }
     }
     LaunchedEffect (key1 = Unit){
-        viewModel.loadListItems()
+        viewModel.loadUsers()
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewShowVoluntaryView(){
-    ShowListsView(navController = rememberNavController())
 }

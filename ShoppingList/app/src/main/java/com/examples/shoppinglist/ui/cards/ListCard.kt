@@ -128,6 +128,13 @@ fun ListCard(navController: NavController, id: String, name: String, description
                         }
                     )
                     DropdownMenuItem(
+                        text = { Text("Share this list") },
+                        onClick = {
+                            navController.navigate("shareList/$id")
+                            menuExpanded = false
+                        }
+                    )
+                    DropdownMenuItem(
                         text = { Text("Delete") },
                         onClick = {
                             navController.navigate("deleteList/$id")
