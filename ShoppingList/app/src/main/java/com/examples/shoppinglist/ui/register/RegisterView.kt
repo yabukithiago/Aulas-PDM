@@ -1,6 +1,5 @@
 package com.examples.shoppinglist.ui.register
 
-import androidx.lint.kotlin.metadata.Visibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

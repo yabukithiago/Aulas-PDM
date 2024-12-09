@@ -2,14 +2,9 @@ package com.examples.shoppinglist.ui.list
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.examples.shoppinglist.data.models.Item
-import com.examples.shoppinglist.data.models.ListItem
 import com.examples.shoppinglist.data.models.User
 import com.examples.shoppinglist.data.repository.ListItemRepository
-import com.examples.shoppinglist.data.repository.UserRepository
 import com.examples.shoppinglist.data.repository.UserRepository.getAllUsers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 data class ShareListState(
     val listUsers: List<User> = emptyList(),

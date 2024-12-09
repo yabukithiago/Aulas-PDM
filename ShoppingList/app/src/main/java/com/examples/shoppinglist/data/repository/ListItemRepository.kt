@@ -1,6 +1,5 @@
 package com.examples.shoppinglist.data.repository
 
-import android.annotation.SuppressLint
 import com.examples.shoppinglist.data.models.ListItem
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -21,13 +20,13 @@ object ListItemRepository {
                 .addOnSuccessListener { result ->
                     val listItems = mutableListOf<ListItem>()
                     for (document in result) {
-                        document.data?.let { it1 ->
+                        document.data.let { it1 ->
                             listItems.add(ListItem.fromMap(it1))
                         }
                     }
                     onSuccess(listItems)
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener {
                 }
         }
     }
